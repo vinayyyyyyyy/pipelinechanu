@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+ 
+    stages {
+        stage('Clean workspace and Navigate to the folder'){
+            steps{
+                cleanWs()
+                bat 'copy C:\\\\Users\\\\Vinay\\\\Desktop\\\\Modern "C:\\Users\\Vinay\\AppData\\Local\\Jenkins\\.jenkins\\workspace\\pipeline1"'
+            }
+        }
+        stage('Build') {
+            steps {
+                bat 'javac Main.java'
+            }
+        }
+        stage('Jar') {
+            steps {
+                bat 'jar cfe myJar.jar Main Main.class'
+            }
+        }
+        stage('Run') {
+            steps {
+                bat 'java -jar myJar.jar'
+            }
+        }
+        stage('Artifact'){
+            steps{
+                archiveArtifacts artifacts: '*.jar', followSymlinks: false
+            }
+        }
+    }
+}
